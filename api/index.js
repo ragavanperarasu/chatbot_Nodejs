@@ -11,7 +11,7 @@ app.use(express.json());
 
 
 const MONGO_URI = process.env.MONGO_URI;
-;
+
 const client = new MongoClient(MONGO_URI);
 let db;
 
@@ -101,4 +101,4 @@ app.listen(3001, () => {
   console.log('🚀 Server Running on http://localhost:3001');
 });
 
-//module.exports = app;
+module.exports = app;
