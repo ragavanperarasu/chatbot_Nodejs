@@ -97,8 +97,8 @@ app.post('/chat', async (req, res) => {
 });
 
 // Start the server
-app.listen(3001, () => {
-  console.log('🚀 Server Running on http://localhost:3001');
-});
+//app.listen(3001, () => {
+//  console.log('🚀 Server Running on http://localhost:3001');
+//});
 
-//module.exports = app;
+module.exports = app;
