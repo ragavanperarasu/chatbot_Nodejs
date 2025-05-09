@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 const stringSimilarity = require('string-similarity');
 const axios = require('axios');
 
@@ -12,15 +12,26 @@ app.use(express.json());
 
 const MONGO_URI = process.env.MONGO_URI;
 
-const client = new MongoClient(MONGO_URI);
-let db;
+// ✅ Connect to MongoDB using Mongoose
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('✅ Connected to MongoDB via Mongoose'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
-async function connectDB() {
-  await client.connect();
-  db = client.db('chatbotDB');
-  console.log('✅ Connected to MongoDB');
-}
-connectDB();
+const messageSchema = new mongoose.Schema({
+  product_id: Number,
+  product_name: String,
+  price: String,
+  category: String,
+  made_in: String,
+  spec: String
+
+});
+
+const Message = mongoose.model('products', messageSchema);
+
 
 
 const OPENROUTER_API_KEY = process.env.API; 
@@ -34,8 +45,12 @@ app.post('/chat', async (req, res) => {
 
   let fullResponse = '';
 
+  //console.log(prompt)
 
-  const allProducts = await db.collection('products').find().toArray();
+  const allProducts = await Message.find();
+
+  //console.log(allProducts)
+
   const threshold = 0.3;
 
   const products = allProducts.filter(p => {
@@ -84,11 +99,11 @@ app.post('/chat', async (req, res) => {
     res.send(fullResponse);
 
  
-    await db.collection('chats').insertOne({
-      prompt,
-      response: fullResponse,
-      timestamp: new Date(),
-    });
+    // await db.collection('chats').insertOne({
+    //   prompt,
+    //   response: fullResponse,
+    //   timestamp: new Date(),
+    // });
 
   } catch (err) {
     console.error('❌ OpenRouter API Error:', err.response?.data || err.message);
