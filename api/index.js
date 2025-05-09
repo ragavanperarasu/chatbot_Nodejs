@@ -45,7 +45,7 @@ app.post('/chat', async (req, res) => {
   }
 
 
-  const finalPrompt = `You are a helpful shopping assistant for my shop. My shop name is Quick Mart. Use the following product data to answer the user's question. If products are available, give the product details in a simple table or list format. if user say hai, hello some other say you say welcome message that time don't say product details.\n\n${context}\n\nUser: ${prompt}\n\nAssistant:`;
+  const finalPrompt = `You are a helpful shopping assistant for my shop. My shop name is Quick Mart. Use the following product data to answer the user's question. If products are available, give the product details in a simple table or list format.that product price are indian rupees. if user say hai, hello some other say you say welcome message that time don't say product details.\n\n${context}\n\nUser: ${prompt}\n\nAssistant:`;
 
 
   try {
